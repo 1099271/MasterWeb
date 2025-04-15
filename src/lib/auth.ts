@@ -319,3 +319,64 @@ export const getUserActivityHistory = async (
     `/api/admin/users/${userId}/activity-history?skip=${skip}&limit=${limit}`
   );
 };
+
+// 小红书接口相关函数
+
+// 定义小红书笔记列表项类型
+export interface XhsNoteListItem {
+  note_id: string;
+  note_url: string;
+  note_cover_url_default: string | null;
+  note_display_title: string | null;
+  note_liked_count: number;
+  comment_count: number;
+  share_count: number;
+  collected_count: number;
+  author_id: string;
+  author_nick_name: string | null;
+  author_avatar: string | null;
+  note_create_time: string | null;
+  note_last_update_time: string | null;
+}
+
+// 定义分页响应类型
+export interface PaginatedXhsNotesResponse {
+  items: XhsNoteListItem[];
+  total: number;
+  page: number;
+  page_size: number;
+}
+
+// 获取小红书笔记列表
+export const getXhsNotesList = async (
+  params: {
+    page?: number;
+    page_size?: number;
+    note_id?: string;
+    title?: string;
+    content?: string;
+    min_likes?: number;
+    max_likes?: number;
+    min_comments?: number;
+    max_comments?: number;
+    min_shares?: number;
+    max_shares?: number;
+    author_id?: string;
+    author_name?: string;
+    start_create_time?: string;
+    end_create_time?: string;
+    start_update_time?: string;
+    end_update_time?: string;
+  } = {}
+): Promise<PaginatedXhsNotesResponse> => {
+  const queryParams = new URLSearchParams();
+
+  // 添加查询参数
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      queryParams.append(key, String(value));
+    }
+  });
+
+  return fetchWithAuth(`/api/v1/xhs/notes/?${queryParams.toString()}`);
+};

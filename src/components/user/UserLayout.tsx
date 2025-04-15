@@ -20,6 +20,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
     { name: '个人资料', href: '/user/profile' },
     { name: '修改密码', href: '/user/change-password' },
     { name: '账户安全', href: '/user/account-security' },
+    { name: '小红书笔记', href: '/user/xhs-notes' },
   ];
 
   const navigationItems = user?.is_admin 
