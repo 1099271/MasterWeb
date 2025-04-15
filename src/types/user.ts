@@ -4,6 +4,7 @@ export interface User {
   username: string;
   is_active: boolean;
   is_verified: boolean;
+  is_admin: boolean;
   avatar?: string;
   bio?: string;
   last_login_at?: string;
@@ -62,4 +63,20 @@ export interface ActivityHistory {
   action: string;
   description: string;
   created_at: string;
+}
+
+export interface UserRoleUpdate {
+  user_id: number;
+  is_admin: boolean;
+}
+
+export interface UserListParams {
+  skip?: number;
+  limit?: number;
+  search?: string;
+  is_active?: boolean;
+  is_verified?: boolean;
+  is_admin?: boolean;
+  order_by?: string;
+  order_direction?: "asc" | "desc";
 }

@@ -254,3 +254,68 @@ export const getActivityHistory = async (
     `/api/users/me/activity-history?skip=${skip}&limit=${limit}`
   );
 };
+
+// 获取用户列表（管理员接口）
+export const getUserList = async (
+  params: any = {}
+): Promise<{ users: User[]; total: number }> => {
+  const queryParams = new URLSearchParams();
+
+  // 添加查询参数
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null) {
+      queryParams.append(key, String(value));
+    }
+  });
+
+  return fetchWithAuth(`/api/admin/users?${queryParams.toString()}`);
+};
+
+// 获取用户详情（管理员接口）
+export const getUserDetail = async (userId: number): Promise<User> => {
+  return fetchWithAuth(`/api/admin/users/${userId}`);
+};
+
+// 更新用户状态（管理员接口）
+export const updateUserStatus = async (
+  userId: number,
+  isActive: boolean
+): Promise<User> => {
+  return fetchWithAuth(`/api/admin/users/${userId}/status`, {
+    method: "PUT",
+    body: JSON.stringify({ is_active: isActive }),
+  });
+};
+
+// 更新用户角色（管理员接口）
+export const updateUserRole = async (
+  userId: number,
+  isAdmin: boolean
+): Promise<User> => {
+  return fetchWithAuth(`/api/admin/users/${userId}/role`, {
+    method: "PUT",
+    body: JSON.stringify({ is_admin: isAdmin }),
+  });
+};
+
+// 获取用户的登录历史（管理员接口）
+export const getUserLoginHistory = async (
+  userId: number,
+  skip = 0,
+  limit = 10
+): Promise<any[]> => {
+  return fetchWithAuth(
+    `/api/admin/users/${userId}/login-history?skip=${skip}&limit=${limit}`
+  );
+};
+
+// 获取用户的活动历史（管理员接口）
+export const getUserActivityHistory = async (
+  userId: number,
+  skip = 0,
+  limit = 10
+): Promise<any[]> => {
+  return fetchWithAuth(
+    `/api/admin/users/${userId}/activity-history?skip=${skip}&limit=${limit}`
+  );
+};
