@@ -30,6 +30,7 @@ export interface UserPassword {
 
 export interface EmailRequest {
   email: string;
+  frontend_url?: string;
 }
 
 export interface EmailVerifyRequest {

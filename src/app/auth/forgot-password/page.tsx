@@ -22,7 +22,11 @@ export default function ForgotPasswordPage() {
     setIsLoading(true);
     
     try {
-      await forgotPassword({ email });
+      const frontendUrl = process.env.NEXT_PUBLIC_FRONTEND_URL;
+      await forgotPassword({ 
+        email,
+        frontend_url: frontendUrl 
+      });
       setSuccess(t('messages.success.resetLinkSent'));
       setEmail('');
     } catch (err) {
