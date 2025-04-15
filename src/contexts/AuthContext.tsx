@@ -64,13 +64,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const data = await authLogin(email, password);
       setUser(data.user);
       
-      // 根据用户角色自动跳转
+      // 统一跳转到用户仪表盘，不再根据角色区分跳转目标
       if (data.user.is_active) {
-        if (data.user.is_admin) {
-          router.push('/admin'); // 管理员跳转到管理员面板
-        } else {
-          router.push('/user/dashboard'); // 普通用户跳转到用户面板
-        }
+        router.push('/user/dashboard'); // 所有用户（包括管理员）都跳转到用户面板
       } else {
         // 如果账户未激活，可以考虑显示提示信息或保持在登录页
         console.warn("用户账户未激活");
@@ -93,9 +89,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // 检查是否为管理员
   const checkIsAdmin = () => {
-    // TODO: 根据后端的实际设计，实现管理员权限的判断逻辑
-    // 这里假设id为1的用户是管理员
-    return user?.id === 1;
+    // 直接检查用户的 is_admin 属性
+    return user?.is_admin === true;
   };
 
   // 刷新用户信息

@@ -22,6 +22,10 @@ const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
     { name: '账户安全', href: '/user/account-security' },
   ];
 
+  const navigationItems = user?.is_admin 
+    ? [...navItems, { name: '管理员控制面板', href: '/admin' }]
+    : navItems;
+
   const isActive = (path: string) => pathname === path;
 
   return (
@@ -89,7 +93,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
         {isMobileMenuOpen && (
           <div className="sm:hidden" id="mobile-menu">
             <div className="space-y-1 px-2 pb-3 pt-2">
-              {navItems.map((item) => (
+              {navigationItems.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
@@ -120,7 +124,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
           {/* 侧边导航 */}
           <div className="hidden lg:col-span-3 lg:block">
             <nav className="sticky top-4 space-y-1">
-              {navItems.map((item) => (
+              {navigationItems.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
