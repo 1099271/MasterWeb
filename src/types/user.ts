@@ -54,7 +54,7 @@ export interface LoginHistory {
   user_id: number;
   ip_address: string;
   user_agent: string;
-  created_at: string;
+  login_time: string;
 }
 
 export interface ActivityHistory {

@@ -13,6 +13,15 @@ import {
 } from '@/lib/auth';
 import { User, LoginHistory, ActivityHistory } from '@/types/user';
 
+// 分页响应接口
+interface PaginatedResponse<T> {
+  history: T[];
+  total: number;
+  page: number;
+  page_size: number;
+  total_pages: number;
+}
+
 export default function UserDetailPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const userId = parseInt(params.id);
@@ -24,6 +33,17 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
   const [activeTab, setActiveTab] = useState<'info' | 'login' | 'activity'>('info');
   const [isProcessing, setIsProcessing] = useState(false);
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  
+  // 添加分页相关状态
+  const [loginCurrentPage, setLoginCurrentPage] = useState(1);
+  const [loginPageSize, setLoginPageSize] = useState(10);
+  const [loginTotalPages, setLoginTotalPages] = useState(1);
+  const [loginTotal, setLoginTotal] = useState(0);
+  
+  const [activityCurrentPage, setActivityCurrentPage] = useState(1);
+  const [activityPageSize, setActivityPageSize] = useState(10);
+  const [activityTotalPages, setActivityTotalPages] = useState(1);
+  const [activityTotal, setActivityTotal] = useState(0);
 
   // 加载用户信息和历史记录
   const loadUserData = async () => {
@@ -33,11 +53,8 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
       setUser(userData);
       
       // 加载登录历史和活动历史
-      const loginData = await getUserLoginHistory(userId);
-      setLoginHistory(loginData);
-      
-      const activityData = await getUserActivityHistory(userId);
-      setActivityHistory(activityData);
+      await loadLoginHistory();
+      await loadActivityHistory();
     } catch (error) {
       console.error('Failed to load user data:', error);
       setStatusMessage({
@@ -47,6 +64,58 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
     } finally {
       setIsLoading(false);
     }
+  };
+  
+  // 加载登录历史
+  const loadLoginHistory = async (page = loginCurrentPage, pageSize = loginPageSize) => {
+    try {
+      const skip = (page - 1) * pageSize;
+      const loginData = await getUserLoginHistory(userId, skip, pageSize) as unknown as PaginatedResponse<LoginHistory>;
+      
+      // 正确提取 history 数组和分页信息
+      setLoginHistory(loginData.history);
+      setLoginTotal(loginData.total);
+      setLoginTotalPages(loginData.total_pages);
+      setLoginCurrentPage(loginData.page);
+      setLoginPageSize(loginData.page_size);
+    } catch (error) {
+      console.error('Failed to load login history:', error);
+      setStatusMessage({
+        type: 'error',
+        text: '加载登录历史失败，请重试'
+      });
+    }
+  };
+  
+  // 加载活动历史
+  const loadActivityHistory = async (page = activityCurrentPage, pageSize = activityPageSize) => {
+    try {
+      const skip = (page - 1) * pageSize;
+      const activityData = await getUserActivityHistory(userId, skip, pageSize) as unknown as PaginatedResponse<ActivityHistory>;
+      
+      // 提取数据和分页信息
+      setActivityHistory(activityData.history);
+      setActivityTotal(activityData.total);
+      setActivityTotalPages(activityData.total_pages);
+      setActivityCurrentPage(activityData.page);
+      setActivityPageSize(activityData.page_size);
+    } catch (error) {
+      console.error('Failed to load activity history:', error);
+      setStatusMessage({
+        type: 'error',
+        text: '加载活动历史失败，请重试'
+      });
+    }
+  };
+  
+  // 处理登录历史分页变化
+  const handleLoginPageChange = (newPage: number) => {
+    loadLoginHistory(newPage, loginPageSize);
+  };
+  
+  // 处理活动历史分页变化
+  const handleActivityPageChange = (newPage: number) => {
+    loadActivityHistory(newPage, activityPageSize);
   };
 
   // 初始检查管理员权限并加载用户数据
@@ -350,7 +419,7 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {loginHistory.length === 0 ? (
+                      {!Array.isArray(loginHistory) || loginHistory.length === 0 ? (
                         <tr>
                           <td colSpan={3} className="px-6 py-4 text-center text-sm text-gray-500">
                             暂无登录记录
@@ -366,13 +435,122 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
                               {login.user_agent}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {new Date(login.created_at).toLocaleString()}
+                              {new Date(login.login_time).toLocaleString()}
                             </td>
                           </tr>
                         ))
                       )}
                     </tbody>
                   </table>
+                  
+                  {/* 分页控件 */}
+                  {loginTotalPages > 1 && (
+                    <div className="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200 sm:px-6">
+                      <div className="flex justify-between flex-1 sm:hidden">
+                        <button
+                          onClick={() => handleLoginPageChange(loginCurrentPage - 1)}
+                          disabled={loginCurrentPage === 1}
+                          className={`relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md ${
+                            loginCurrentPage === 1
+                              ? 'text-gray-300 cursor-not-allowed'
+                              : 'text-gray-700 hover:bg-gray-50'
+                          }`}
+                        >
+                          上一页
+                        </button>
+                        <button
+                          onClick={() => handleLoginPageChange(loginCurrentPage + 1)}
+                          disabled={loginCurrentPage === loginTotalPages}
+                          className={`ml-3 relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md ${
+                            loginCurrentPage === loginTotalPages
+                              ? 'text-gray-300 cursor-not-allowed'
+                              : 'text-gray-700 hover:bg-gray-50'
+                          }`}
+                        >
+                          下一页
+                        </button>
+                      </div>
+                      <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+                        <div>
+                          <p className="text-sm text-gray-700">
+                            显示第 <span className="font-medium">{(loginCurrentPage - 1) * loginPageSize + 1}</span> 到 
+                            <span className="font-medium">
+                              {Math.min(loginCurrentPage * loginPageSize, loginTotal)}
+                            </span> 条，共 
+                            <span className="font-medium">{loginTotal}</span> 条结果
+                          </p>
+                        </div>
+                        <div>
+                          <nav className="inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                            <button
+                              onClick={() => handleLoginPageChange(loginCurrentPage - 1)}
+                              disabled={loginCurrentPage === 1}
+                              className={`relative inline-flex items-center px-2 py-2 rounded-l-md border ${
+                                loginCurrentPage === 1
+                                  ? 'border-gray-300 bg-white text-gray-300 cursor-not-allowed'
+                                  : 'border-gray-300 bg-white text-gray-500 hover:bg-gray-50'
+                              }`}
+                            >
+                              <span className="sr-only">上一页</span>
+                              <svg
+                                className="h-5 w-5"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                                aria-hidden="true"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            </button>
+                            
+                            {/* 页码按钮 */}
+                            {Array.from({ length: loginTotalPages }, (_, i) => i + 1).map((page) => (
+                              <button
+                                key={page}
+                                onClick={() => handleLoginPageChange(page)}
+                                className={`relative inline-flex items-center px-4 py-2 border ${
+                                  page === loginCurrentPage
+                                    ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
+                                    : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+                                }`}
+                              >
+                                {page}
+                              </button>
+                            ))}
+                            
+                            <button
+                              onClick={() => handleLoginPageChange(loginCurrentPage + 1)}
+                              disabled={loginCurrentPage === loginTotalPages}
+                              className={`relative inline-flex items-center px-2 py-2 rounded-r-md border ${
+                                loginCurrentPage === loginTotalPages
+                                  ? 'border-gray-300 bg-white text-gray-300 cursor-not-allowed'
+                                  : 'border-gray-300 bg-white text-gray-500 hover:bg-gray-50'
+                              }`}
+                            >
+                              <span className="sr-only">下一页</span>
+                              <svg
+                                className="h-5 w-5"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                                aria-hidden="true"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            </button>
+                          </nav>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -396,7 +574,7 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {activityHistory.length === 0 ? (
+                      {!Array.isArray(activityHistory) || activityHistory.length === 0 ? (
                         <tr>
                           <td colSpan={3} className="px-6 py-4 text-center text-sm text-gray-500">
                             暂无活动记录
@@ -419,6 +597,115 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
                       )}
                     </tbody>
                   </table>
+                  
+                  {/* 活动历史分页控件 */}
+                  {activityTotalPages > 1 && (
+                    <div className="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200 sm:px-6">
+                      <div className="flex justify-between flex-1 sm:hidden">
+                        <button
+                          onClick={() => handleActivityPageChange(activityCurrentPage - 1)}
+                          disabled={activityCurrentPage === 1}
+                          className={`relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md ${
+                            activityCurrentPage === 1
+                              ? 'text-gray-300 cursor-not-allowed'
+                              : 'text-gray-700 hover:bg-gray-50'
+                          }`}
+                        >
+                          上一页
+                        </button>
+                        <button
+                          onClick={() => handleActivityPageChange(activityCurrentPage + 1)}
+                          disabled={activityCurrentPage === activityTotalPages}
+                          className={`ml-3 relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md ${
+                            activityCurrentPage === activityTotalPages
+                              ? 'text-gray-300 cursor-not-allowed'
+                              : 'text-gray-700 hover:bg-gray-50'
+                          }`}
+                        >
+                          下一页
+                        </button>
+                      </div>
+                      <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+                        <div>
+                          <p className="text-sm text-gray-700">
+                            显示第 <span className="font-medium">{(activityCurrentPage - 1) * activityPageSize + 1}</span> 到 
+                            <span className="font-medium">
+                              {Math.min(activityCurrentPage * activityPageSize, activityTotal)}
+                            </span> 条，共 
+                            <span className="font-medium">{activityTotal}</span> 条结果
+                          </p>
+                        </div>
+                        <div>
+                          <nav className="inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                            <button
+                              onClick={() => handleActivityPageChange(activityCurrentPage - 1)}
+                              disabled={activityCurrentPage === 1}
+                              className={`relative inline-flex items-center px-2 py-2 rounded-l-md border ${
+                                activityCurrentPage === 1
+                                  ? 'border-gray-300 bg-white text-gray-300 cursor-not-allowed'
+                                  : 'border-gray-300 bg-white text-gray-500 hover:bg-gray-50'
+                              }`}
+                            >
+                              <span className="sr-only">上一页</span>
+                              <svg
+                                className="h-5 w-5"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                                aria-hidden="true"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            </button>
+                            
+                            {/* 页码按钮 */}
+                            {Array.from({ length: activityTotalPages }, (_, i) => i + 1).map((page) => (
+                              <button
+                                key={page}
+                                onClick={() => handleActivityPageChange(page)}
+                                className={`relative inline-flex items-center px-4 py-2 border ${
+                                  page === activityCurrentPage
+                                    ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
+                                    : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+                                }`}
+                              >
+                                {page}
+                              </button>
+                            ))}
+                            
+                            <button
+                              onClick={() => handleActivityPageChange(activityCurrentPage + 1)}
+                              disabled={activityCurrentPage === activityTotalPages}
+                              className={`relative inline-flex items-center px-2 py-2 rounded-r-md border ${
+                                activityCurrentPage === activityTotalPages
+                                  ? 'border-gray-300 bg-white text-gray-300 cursor-not-allowed'
+                                  : 'border-gray-300 bg-white text-gray-500 hover:bg-gray-50'
+                              }`}
+                            >
+                              <span className="sr-only">下一页</span>
+                              <svg
+                                className="h-5 w-5"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                                aria-hidden="true"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            </button>
+                          </nav>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}

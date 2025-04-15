@@ -66,8 +66,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       // 根据用户角色自动跳转
       if (data.user.is_active) {
-        // TODO: 根据用户角色决定跳转到用户面板还是管理员面板
-        router.push('/user/dashboard');
+        if (data.user.is_admin) {
+          router.push('/admin'); // 管理员跳转到管理员面板
+        } else {
+          router.push('/user/dashboard'); // 普通用户跳转到用户面板
+        }
+      } else {
+        // 如果账户未激活，可以考虑显示提示信息或保持在登录页
+        console.warn("用户账户未激活");
+        // 可以在这里添加 setError("账户未激活") 或其他逻辑
       }
     } catch (error) {
       console.error('Login failed:', error);
