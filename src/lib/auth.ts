@@ -382,3 +382,92 @@ export const getXhsNotesList = async (
 
   return fetchWithAuth(`/api/v1/xhs/notes/?${queryParams.toString()}`);
 };
+
+// 小红书笔记详情相关接口
+
+// 定义笔记基础信息类型
+export interface NoteBasicDetails {
+  note_id: string;
+  note_url: string | null;
+  note_display_title: string | null;
+  note_cover_url_default: string | null;
+  note_liked_count: number | null;
+  comment_count: number | null;
+  share_count: number | null;
+  collected_count: number | null;
+  note_desc: string | null;
+  note_create_time: string | null;
+  note_last_update_time: string | null;
+  note_image_list: Array<{ url: string; width: number; height: number }> | null;
+  note_tags: string[] | null;
+  video_h264_url: string | null;
+  auther_user_id: string | null;
+  auther_nick_name: string | null;
+  auther_avatar: string | null;
+  auther_home_page_url: string | null;
+}
+
+// 定义作者详情类型
+export interface AuthorDetails {
+  user_id: string;
+  nick_name: string | null;
+  avatar: string | null;
+  desc: string | null;
+  ip_location: string | null;
+  fans: string | null;
+  follows: string | null;
+  gender: string | null;
+}
+
+// 定义关键词群组类型
+export interface KeywordGroupItem {
+  retrieved_at: string | null;
+  keyword_group: {
+    group_id: number;
+    group_name: string;
+    keywords: string[] | null;
+  };
+}
+
+// 获取笔记基础信息
+export const getNoteBasicDetails = async (
+  noteId: string
+): Promise<NoteBasicDetails> => {
+  return fetchWithAuth(`/api/v1/xhs/notes/${noteId}/basic`);
+};
+
+// 获取笔记作者详情
+export const getNoteAuthorDetails = async (
+  noteId: string
+): Promise<AuthorDetails> => {
+  return fetchWithAuth(`/api/v1/xhs/notes/${noteId}/author`);
+};
+
+// 获取笔记关键词群组
+export const getNoteKeywordGroups = async (
+  noteId: string
+): Promise<KeywordGroupItem[]> => {
+  return fetchWithAuth(`/api/v1/xhs/notes/${noteId}/keyword-groups`);
+};
+
+// 获取笔记评论
+export const getNoteComments = async (noteId: string): Promise<any[]> => {
+  return fetchWithAuth(`/api/v1/xhs/notes/${noteId}/comments`);
+};
+
+// 获取笔记的LLM诊断结果
+export const getNoteLlmDiagnoses = async (noteId: string): Promise<any[]> => {
+  return fetchWithAuth(`/api/v1/xhs/notes/${noteId}/llm-diagnoses`);
+};
+
+// 获取笔记的标签比较
+export const getNoteTagComparisons = async (noteId: string): Promise<any[]> => {
+  return fetchWithAuth(`/api/v1/xhs/notes/${noteId}/tag-comparisons`);
+};
+
+// 获取笔记的评论分析
+export const getNoteCommentAnalyses = async (
+  noteId: string
+): Promise<any[]> => {
+  return fetchWithAuth(`/api/v1/xhs/notes/${noteId}/comment-analyses`);
+};
