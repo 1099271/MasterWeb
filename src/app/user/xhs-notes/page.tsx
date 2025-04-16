@@ -8,6 +8,16 @@ import Button from '@/components/ui/Button';
 import { getXhsNotesList, XhsNoteListItem, PaginatedXhsNotesResponse } from '@/lib/auth';
 import Link from 'next/link';
 
+// 定义排序字段常量
+const SORT_FIELDS = {
+  LIKES: 'note_liked_count',
+  COMMENTS: 'comment_count',
+  SHARES: 'share_count',
+  COLLECTED: 'collected_count',
+  CREATE_TIME: 'note_create_time',
+  UPDATE_TIME: 'note_last_update_time'
+};
+
 export default function XhsNotesPage() {
   // 状态定义
   const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +50,10 @@ export default function XhsNotesPage() {
   // 分页状态
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
+
+  // 排序状态
+  const [sortBy, setSortBy] = useState<string>(SORT_FIELDS.CREATE_TIME); // 默认按创建时间排序
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc'); // 默认降序
   
   // 高级筛选折叠状态
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
@@ -68,6 +82,8 @@ export default function XhsNotesPage() {
         end_create_time: filters.end_create_time || undefined,
         start_update_time: filters.start_update_time || undefined,
         end_update_time: filters.end_update_time || undefined,
+        sort_by: sortBy, // 添加排序字段
+        sort_order: sortOrder, // 添加排序顺序
       };
       
       // 将字符串类型的数值转换为数字
@@ -85,20 +101,39 @@ export default function XhsNotesPage() {
       setPage(pageNum);
     } catch (error) {
       console.error('获取小红书笔记失败:', error);
+      // 添加用户友好的错误提示，例如使用 Toast
     } finally {
       setIsLoading(false);
     }
   };
   
-  // 初始加载
+  // 初始加载及排序/分页变化时重新加载
   useEffect(() => {
     fetchNotes();
-  }, []);
+  }, [sortBy, sortOrder, pageSize]); // 依赖项包含排序和分页大小
   
   // 处理搜索提交
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     fetchNotes(1); // 搜索时重置到第一页
+  };
+
+  // 处理排序变化
+  const handleSortChange = (newSortBy: string) => {
+    if (newSortBy === sortBy) {
+      // 如果点击的是当前排序字段，则切换排序顺序
+      setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      // 如果点击的是新的排序字段，则设置新字段并默认为降序
+      setSortBy(newSortBy);
+      setSortOrder('desc');
+    }
+    // 排序变化时，我们通常也希望回到第一页
+    if (page !== 1) {
+        setPage(1); // 触发 useEffect 重新获取数据
+    } else {
+        fetchNotes(1); // 如果已经是第一页，手动触发获取
+    }
   };
   
   // 处理重置筛选条件
@@ -120,6 +155,10 @@ export default function XhsNotesPage() {
       start_update_time: '',
       end_update_time: ''
     });
+    // 重置筛选时，也可能需要重置排序到默认值（如果需要的话）
+    // setSortBy(SORT_FIELDS.CREATE_TIME);
+    // setSortOrder('desc');
+    // fetchNotes(1); // 重置后重新获取第一页数据
   };
   
   // 处理翻页
@@ -127,6 +166,19 @@ export default function XhsNotesPage() {
     if (newPage > 0 && newPage <= Math.ceil(notesData.total / pageSize)) {
       fetchNotes(newPage);
     }
+  };
+
+  // 获取排序按钮的样式
+  const getSortButtonStyle = (field: string) => {
+    return sortBy === field
+      ? 'bg-blue-100 text-blue-700'
+      : 'bg-gray-100 text-gray-700 hover:bg-gray-200';
+  };
+
+  // 获取排序图标
+  const getSortIcon = (field: string) => {
+    if (sortBy !== field) return null;
+    return sortOrder === 'asc' ? '↑' : '↓';
   };
   
   return (
@@ -352,9 +404,62 @@ export default function XhsNotesPage() {
           
           {/* 笔记列表展示 */}
           <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold">笔记列表</h2>
-              <div className="text-sm text-gray-500">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
+              <h2 className="text-lg font-semibold whitespace-nowrap">笔记列表</h2>
+              
+              {/* 排序按钮组 */}
+              <div className="flex flex-wrap gap-2">
+                <Button 
+                  size="sm"
+                  variant="outline"
+                  className={`px-3 py-1 ${getSortButtonStyle(SORT_FIELDS.CREATE_TIME)}`}
+                  onClick={() => handleSortChange(SORT_FIELDS.CREATE_TIME)}
+                >
+                  按发布时间 {getSortIcon(SORT_FIELDS.CREATE_TIME)}
+                </Button>
+                <Button 
+                  size="sm"
+                  variant="outline"
+                  className={`px-3 py-1 ${getSortButtonStyle(SORT_FIELDS.LIKES)}`}
+                  onClick={() => handleSortChange(SORT_FIELDS.LIKES)}
+                >
+                  按点赞数 {getSortIcon(SORT_FIELDS.LIKES)}
+                </Button>
+                <Button 
+                  size="sm"
+                  variant="outline"
+                  className={`px-3 py-1 ${getSortButtonStyle(SORT_FIELDS.COMMENTS)}`}
+                  onClick={() => handleSortChange(SORT_FIELDS.COMMENTS)}
+                >
+                  按评论数 {getSortIcon(SORT_FIELDS.COMMENTS)}
+                </Button>
+                <Button 
+                  size="sm"
+                  variant="outline"
+                  className={`px-3 py-1 ${getSortButtonStyle(SORT_FIELDS.SHARES)}`}
+                  onClick={() => handleSortChange(SORT_FIELDS.SHARES)}
+                >
+                  按分享数 {getSortIcon(SORT_FIELDS.SHARES)}
+                </Button>
+                 <Button 
+                  size="sm"
+                  variant="outline"
+                  className={`px-3 py-1 ${getSortButtonStyle(SORT_FIELDS.COLLECTED)}`}
+                  onClick={() => handleSortChange(SORT_FIELDS.COLLECTED)}
+                >
+                  按收藏数 {getSortIcon(SORT_FIELDS.COLLECTED)}
+                </Button>
+                 <Button 
+                  size="sm"
+                  variant="outline"
+                  className={`px-3 py-1 ${getSortButtonStyle(SORT_FIELDS.UPDATE_TIME)}`}
+                  onClick={() => handleSortChange(SORT_FIELDS.UPDATE_TIME)}
+                >
+                  按更新时间 {getSortIcon(SORT_FIELDS.UPDATE_TIME)}
+                </Button>
+              </div>
+
+              <div className="text-sm text-gray-500 whitespace-nowrap">
                 共 <span className="font-medium">{notesData.total}</span> 条记录
               </div>
             </div>

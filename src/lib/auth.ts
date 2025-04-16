@@ -367,6 +367,8 @@ export const getXhsNotesList = async (
     end_create_time?: string;
     start_update_time?: string;
     end_update_time?: string;
+    sort_by?: string;
+    sort_order?: "asc" | "desc";
   } = {}
 ): Promise<PaginatedXhsNotesResponse> => {
   const queryParams = new URLSearchParams();
