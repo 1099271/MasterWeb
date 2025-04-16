@@ -407,58 +407,6 @@ export default function XhsNotesPage() {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
               <h2 className="text-lg font-semibold whitespace-nowrap text-gray-900 dark:text-white">笔记列表</h2>
               
-              {/* 排序按钮组 */}
-              <div className="flex flex-wrap gap-2">
-                <Button 
-                  size="sm"
-                  variant="outline"
-                  className={`px-3 py-1 ${getSortButtonStyle(SORT_FIELDS.CREATE_TIME)}`}
-                  onClick={() => handleSortChange(SORT_FIELDS.CREATE_TIME)}
-                >
-                  按发布时间 {getSortIcon(SORT_FIELDS.CREATE_TIME)}
-                </Button>
-                <Button 
-                  size="sm"
-                  variant="outline"
-                  className={`px-3 py-1 ${getSortButtonStyle(SORT_FIELDS.LIKES)}`}
-                  onClick={() => handleSortChange(SORT_FIELDS.LIKES)}
-                >
-                  按点赞数 {getSortIcon(SORT_FIELDS.LIKES)}
-                </Button>
-                <Button 
-                  size="sm"
-                  variant="outline"
-                  className={`px-3 py-1 ${getSortButtonStyle(SORT_FIELDS.COMMENTS)}`}
-                  onClick={() => handleSortChange(SORT_FIELDS.COMMENTS)}
-                >
-                  按评论数 {getSortIcon(SORT_FIELDS.COMMENTS)}
-                </Button>
-                <Button 
-                  size="sm"
-                  variant="outline"
-                  className={`px-3 py-1 ${getSortButtonStyle(SORT_FIELDS.SHARES)}`}
-                  onClick={() => handleSortChange(SORT_FIELDS.SHARES)}
-                >
-                  按分享数 {getSortIcon(SORT_FIELDS.SHARES)}
-                </Button>
-                 <Button 
-                  size="sm"
-                  variant="outline"
-                  className={`px-3 py-1 ${getSortButtonStyle(SORT_FIELDS.COLLECTED)}`}
-                  onClick={() => handleSortChange(SORT_FIELDS.COLLECTED)}
-                >
-                  按收藏数 {getSortIcon(SORT_FIELDS.COLLECTED)}
-                </Button>
-                 <Button 
-                  size="sm"
-                  variant="outline"
-                  className={`px-3 py-1 ${getSortButtonStyle(SORT_FIELDS.UPDATE_TIME)}`}
-                  onClick={() => handleSortChange(SORT_FIELDS.UPDATE_TIME)}
-                >
-                  按更新时间 {getSortIcon(SORT_FIELDS.UPDATE_TIME)}
-                </Button>
-              </div>
-
               <div className="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
                 共 <span className="font-medium text-gray-700 dark:text-gray-300">{notesData.total}</span> 条记录
               </div>
@@ -474,32 +422,98 @@ export default function XhsNotesPage() {
               </div>
             ) : notesData.items.length > 0 ? (
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 relative">
                   <thead className="bg-gray-50 dark:bg-gray-700">
                     <tr>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider min-w-[100px]">
                         封面
                       </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider min-w-[150px]">
                         标题/ID
                       </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider min-w-[120px]">
                         作者
                       </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                        互动数据
+                      <th 
+                        scope="col" 
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 min-w-[90px] transition-colors duration-200"
+                        onClick={() => handleSortChange(SORT_FIELDS.LIKES)}
+                      >
+                        <div className="flex items-center">
+                          点赞
+                          {sortBy === SORT_FIELDS.LIKES && (
+                            <span className="ml-1 text-blue-600 dark:text-blue-400">{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                          )}
+                        </div>
                       </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                        时间
+                      <th 
+                        scope="col" 
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 min-w-[90px] transition-colors duration-200"
+                        onClick={() => handleSortChange(SORT_FIELDS.COMMENTS)}
+                      >
+                        <div className="flex items-center">
+                          评论
+                          {sortBy === SORT_FIELDS.COMMENTS && (
+                            <span className="ml-1 text-blue-600 dark:text-blue-400">{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                          )}
+                        </div>
                       </th>
-                      <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                      <th 
+                        scope="col" 
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 min-w-[90px] transition-colors duration-200"
+                        onClick={() => handleSortChange(SORT_FIELDS.SHARES)}
+                      >
+                        <div className="flex items-center">
+                          分享
+                          {sortBy === SORT_FIELDS.SHARES && (
+                            <span className="ml-1 text-blue-600 dark:text-blue-400">{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                          )}
+                        </div>
+                      </th>
+                      <th 
+                        scope="col" 
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 min-w-[90px] transition-colors duration-200"
+                        onClick={() => handleSortChange(SORT_FIELDS.COLLECTED)}
+                      >
+                        <div className="flex items-center">
+                          收藏
+                          {sortBy === SORT_FIELDS.COLLECTED && (
+                            <span className="ml-1 text-blue-600 dark:text-blue-400">{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                          )}
+                        </div>
+                      </th>
+                      <th 
+                        scope="col" 
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 min-w-[140px] transition-colors duration-200"
+                        onClick={() => handleSortChange(SORT_FIELDS.CREATE_TIME)}
+                      >
+                        <div className="flex items-center">
+                          创建时间
+                          {sortBy === SORT_FIELDS.CREATE_TIME && (
+                            <span className="ml-1 text-blue-600 dark:text-blue-400">{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                          )}
+                        </div>
+                      </th>
+                      <th 
+                        scope="col" 
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 min-w-[140px] transition-colors duration-200"
+                        onClick={() => handleSortChange(SORT_FIELDS.UPDATE_TIME)}
+                      >
+                        <div className="flex items-center">
+                          更新时间
+                          {sortBy === SORT_FIELDS.UPDATE_TIME && (
+                            <span className="ml-1 text-blue-600 dark:text-blue-400">{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                          )}
+                        </div>
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider min-w-[80px] sticky right-0 bg-gray-50 dark:bg-gray-700 shadow-sm z-10">
                         操作
                       </th>
                     </tr>
                   </thead>
                   <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                     {notesData.items.map((note) => (
-                      <tr key={note.note_id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                      <tr key={note.note_id} className="group hover:bg-gray-50 dark:hover:bg-gray-700">
                         <td className="px-6 py-4 whitespace-nowrap">
                           {note.note_cover_url_default ? (
                             <img 
@@ -552,47 +566,41 @@ export default function XhsNotesPage() {
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-500 dark:text-gray-400 flex flex-col space-y-1">
-                            <span>点赞: {note.note_liked_count}</span>
-                            <span>评论: {note.comment_count}</span>
-                            <span>分享: {note.share_count}</span>
-                            <span>收藏: {note.collected_count}</span>
-                          </div>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                          {note.note_liked_count}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-500 dark:text-gray-400 flex flex-col space-y-1">
-                            <div>
-                              <span className="text-xs font-medium text-gray-700 dark:text-gray-300">创建:</span>
-                              <span className="ml-1">
-                                {note.note_create_time 
-                                  ? new Date(note.note_create_time).toLocaleString('zh-CN', { 
-                                      year: 'numeric', 
-                                      month: '2-digit', 
-                                      day: '2-digit',
-                                      hour: '2-digit',
-                                      minute: '2-digit'
-                                    }) 
-                                  : '未知'}
-                              </span>
-                            </div>
-                            <div>
-                              <span className="text-xs font-medium text-gray-700 dark:text-gray-300">更新:</span>
-                              <span className="ml-1">
-                                {note.note_last_update_time 
-                                  ? new Date(note.note_last_update_time).toLocaleString('zh-CN', { 
-                                      year: 'numeric', 
-                                      month: '2-digit', 
-                                      day: '2-digit',
-                                      hour: '2-digit',
-                                      minute: '2-digit'
-                                    }) 
-                                  : '未知'}
-                              </span>
-                            </div>
-                          </div>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                          {note.comment_count}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                          {note.share_count}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                          {note.collected_count}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                          {note.note_create_time 
+                            ? new Date(note.note_create_time).toLocaleString('zh-CN', { 
+                                year: 'numeric', 
+                                month: '2-digit', 
+                                day: '2-digit',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                              }) 
+                            : '未知'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                          {note.note_last_update_time 
+                            ? new Date(note.note_last_update_time).toLocaleString('zh-CN', { 
+                                year: 'numeric', 
+                                month: '2-digit', 
+                                day: '2-digit',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                              }) 
+                            : '未知'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium sticky right-0 z-10 bg-white dark:bg-gray-800 group-hover:bg-gray-50 dark:group-hover:bg-gray-700 shadow-sm">
                           <a 
                             href={`/user/xhs-notes/${note.note_id}`} 
                             className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"

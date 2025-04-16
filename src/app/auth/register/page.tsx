@@ -100,26 +100,26 @@ export default function RegisterPage() {
   };
   
   return (
-    <div className="flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8 bg-gray-50">
+    <div className="flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8 bg-gray-50 dark:bg-gray-900">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
           创建新账户
         </h2>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white px-6 py-8 shadow sm:rounded-lg sm:px-10">
+        <div className="bg-white dark:bg-gray-800 px-6 py-8 shadow sm:rounded-lg sm:px-10 border border-gray-200 dark:border-gray-700">
           {success ? (
-            <div className="rounded-md bg-green-50 p-4 mb-4">
-              <div className="text-sm text-green-700">
+            <div className="rounded-md bg-green-50 dark:bg-green-900/20 p-4 mb-4">
+              <div className="text-sm text-green-700 dark:text-green-400">
                 {success}
               </div>
             </div>
           ) : (
             <form className="space-y-6" onSubmit={handleSubmit}>
               {errors.general && (
-                <div className="rounded-md bg-red-50 p-4">
-                  <div className="text-sm text-red-700">
+                <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-4">
+                  <div className="text-sm text-red-700 dark:text-red-400">
                     {errors.general}
                   </div>
                 </div>
@@ -186,7 +186,7 @@ export default function RegisterPage() {
           )}
 
           <div className="mt-6 text-center">
-            <Link href="/auth/login" className="font-medium text-blue-600 hover:text-blue-500">
+            <Link href="/auth/login" className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300">
               已有账户? 立即登录
             </Link>
           </div>
