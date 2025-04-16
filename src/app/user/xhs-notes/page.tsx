@@ -6,6 +6,7 @@ import UserLayout from '@/components/user/UserLayout';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import { getXhsNotesList, XhsNoteListItem, PaginatedXhsNotesResponse } from '@/lib/auth';
+import Link from 'next/link';
 
 export default function XhsNotesPage() {
   // 状态定义
@@ -132,7 +133,24 @@ export default function XhsNotesPage() {
     <ProtectedRoute>
       <UserLayout>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">小红书笔记列表</h1>
+          <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">小红书笔记列表</h1>
+            <nav className="flex" aria-label="Breadcrumb">
+              <ol className="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
+                <li className="inline-flex items-center">
+                  <Link href="/user/dashboard" className="inline-flex items-center text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500">
+                    仪表盘
+                  </Link>
+                </li>
+                <li>
+                  <div className="flex items-center">
+                    <span className="mx-1 text-gray-400">/</span>
+                    <span className="text-blue-600 dark:text-blue-500">小红书笔记</span>
+                  </div>
+                </li>
+              </ol>
+            </nav>
+          </div>
           
           {/* 搜索表单 */}
           <div className="bg-white rounded-lg shadow-sm p-6 mb-6 border border-gray-200">
