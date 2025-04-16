@@ -4,10 +4,12 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Button from '@/components/ui/Button';
+import { useTranslation } from '@/utils/useTranslation';
 
 export default function Home() {
   const { user, isLoading } = useAuth();
   const router = useRouter();
+  const { t } = useTranslation();
   
   // 如果用户已登录，根据角色重定向到对应的仪表盘
   useEffect(() => {
@@ -34,40 +36,40 @@ export default function Home() {
     <main className="flex flex-col items-center justify-center min-h-screen px-4 py-12 bg-gray-50">
       <div className="w-full max-w-3xl text-center">
         <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-          用户管理系统
+          {t('common.system.title')}
         </h1>
         <p className="mt-6 text-lg text-gray-600">
-          这是一个基于Next.js和FastAPI的现代化用户管理系统，提供安全且高效的用户注册、登录、信息管理等功能。
+          {t('common.system.description')}
         </p>
         
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
           <Button href="/auth/login" size="lg">
-            登录
+            {t('common.buttons.login')}
           </Button>
           <Button href="/auth/register" variant="outline" size="lg">
-            注册
+            {t('common.buttons.register')}
           </Button>
         </div>
         
         <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           <div className="p-6 bg-white rounded-lg shadow">
-            <h3 className="text-xl font-semibold mb-2">安全保障</h3>
+            <h3 className="text-xl font-semibold mb-2">{t('common.features.security.title')}</h3>
             <p className="text-gray-600">
-              采用JWT认证机制和密码加密存储，保障用户账户安全。
+              {t('common.features.security.description')}
             </p>
           </div>
           
           <div className="p-6 bg-white rounded-lg shadow">
-            <h3 className="text-xl font-semibold mb-2">个人信息管理</h3>
+            <h3 className="text-xl font-semibold mb-2">{t('common.features.profile.title')}</h3>
             <p className="text-gray-600">
-              方便地管理个人资料、修改密码及查看账户活动历史。
+              {t('common.features.profile.description')}
             </p>
           </div>
           
           <div className="p-6 bg-white rounded-lg shadow">
-            <h3 className="text-xl font-semibold mb-2">便捷的账户恢复</h3>
+            <h3 className="text-xl font-semibold mb-2">{t('common.features.recovery.title')}</h3>
             <p className="text-gray-600">
-              通过邮箱验证快速找回密码和恢复访问。
+              {t('common.features.recovery.description')}
             </p>
           </div>
         </div>

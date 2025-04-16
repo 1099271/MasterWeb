@@ -4,11 +4,13 @@ import React from 'react';
 import Link from 'next/link';
 import { useSidebar } from '@/contexts/SidebarContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from '@/utils/useTranslation';
 
 const AppHeader: React.FC = () => {
   const { toggleSidebar, toggleMobileSidebar, isMobileOpen } = useSidebar();
   const { user, logout } = useAuth();
   const [isUserMenuOpen, setIsUserMenuOpen] = React.useState(false);
+  const { t } = useTranslation();
 
   // 切换侧边栏处理函数
   const handleToggle = () => {
@@ -32,7 +34,7 @@ const AppHeader: React.FC = () => {
           <button
             className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
             onClick={handleToggle}
-            aria-label="Toggle Sidebar"
+            aria-label={t('common.buttons.toggleSidebar')}
           >
             {isMobileOpen ? (
               <svg 
@@ -71,7 +73,7 @@ const AppHeader: React.FC = () => {
           </button>
 
           <Link href="/" className="text-xl font-bold text-blue-600 dark:text-blue-500">
-            用户管理系统
+            {t('common.system.title')}
           </Link>
         </div>
 
@@ -131,14 +133,14 @@ const AppHeader: React.FC = () => {
                   href="/user/profile"
                   className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
                 >
-                  个人资料
+                  {t('common.nav.profile')}
                 </Link>
                 {user?.is_admin && (
                   <Link
                     href="/admin"
                     className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
                   >
-                    管理员控制面板
+                    {t('common.nav.admin')}
                   </Link>
                 )}
                 <div className="my-1 h-px bg-gray-200 dark:bg-gray-800"></div>
@@ -146,7 +148,7 @@ const AppHeader: React.FC = () => {
                   onClick={logout}
                   className="flex w-full items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-800"
                 >
-                  退出登录
+                  {t('common.nav.logout')}
                 </button>
               </div>
             )}

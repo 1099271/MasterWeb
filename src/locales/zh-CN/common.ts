@@ -7,6 +7,7 @@ export const common = {
   nav: {
     dashboard: "仪表盘",
     profile: "个人资料",
+    admin: "管理员控制面板",
     changePassword: "修改密码",
     accountSecurity: "账户安全",
     logout: "退出登录",
@@ -22,6 +23,7 @@ export const common = {
     goBack: "返回",
     cancel: "取消",
     resendVerificationEmail: "重新发送验证邮件",
+    toggleSidebar: "切换侧边栏",
   },
   features: {
     security: {
@@ -39,4 +41,10 @@ export const common = {
   },
   loading: "加载中...",
   or: "或者",
+  layout: {
+    sidebar: "侧边栏",
+    mainContent: "主内容区域",
+    topNav: "顶部导航",
+    pageContent: "页面内容",
+  },
 };
