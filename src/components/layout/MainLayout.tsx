@@ -34,7 +34,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         <AppHeader />
         
         {/* 页面内容 */}
-        <main className="px-4 pt-[80px] pb-6 md:px-6">
+        <main className="px-4 pt-[80px] pb-6 md:px-6 bg-gray-50 dark:bg-gray-900">
           {children}
         </main>
       </div>

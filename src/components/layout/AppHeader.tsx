@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useSidebar } from '@/contexts/SidebarContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTranslation } from '@/utils/useTranslation';
+import { ThemeToggleButton } from './ThemeToggleButton';
 
 const AppHeader: React.FC = () => {
   const { toggleSidebar, toggleMobileSidebar, isMobileOpen } = useSidebar();
@@ -81,6 +82,9 @@ const AppHeader: React.FC = () => {
         <div className="relative flex items-center gap-3">
           {/* 搜索框可以在这里添加 */}
           
+          {/* 添加 ThemeToggleButton */}
+          <ThemeToggleButton />
+
           {/* 用户头像和下拉菜单 */}
           <div className="relative">
             <button

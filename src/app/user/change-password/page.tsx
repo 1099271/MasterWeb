@@ -89,21 +89,21 @@ export default function ChangePasswordPage() {
   return (
     <ProtectedRoute>
       <UserLayout>
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">修改密码</h1>
+        <div className="text-gray-900 dark:text-gray-100">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">修改密码</h1>
           
-          <div className="max-w-md mx-auto">
+          <div className="max-w-md mx-auto bg-white dark:bg-gray-800 p-6 rounded-lg shadow border border-gray-200 dark:border-gray-700">
             {success ? (
-              <div className="rounded-md bg-green-50 p-4 mb-4">
-                <div className="text-sm text-green-700">
+              <div className="rounded-md bg-green-50 dark:bg-green-900 p-4 mb-4">
+                <div className="text-sm text-green-700 dark:text-green-300">
                   {success}
                 </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
                 {errors.general && (
-                  <div className="rounded-md bg-red-50 p-4">
-                    <div className="text-sm text-red-700">
+                  <div className="rounded-md bg-red-50 dark:bg-red-900 p-4">
+                    <div className="text-sm text-red-700 dark:text-red-300">
                       {errors.general}
                     </div>
                   </div>
@@ -156,9 +156,9 @@ export default function ChangePasswordPage() {
               </form>
             )}
             
-            <div className="mt-8 pt-6 border-t border-gray-200">
-              <h2 className="text-lg font-medium text-gray-900 mb-2">密码安全提示</h2>
-              <ul className="list-disc pl-5 text-sm text-gray-600 space-y-1">
+            <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+              <h2 className="text-lg font-medium text-gray-900 dark:text-white mb-2">密码安全提示</h2>
+              <ul className="list-disc pl-5 text-sm text-gray-600 dark:text-gray-400 space-y-1">
                 <li>密码长度至少为8个字符</li>
                 <li>建议使用字母、数字和特殊字符的组合</li>
                 <li>避免使用容易猜测的个人信息，如生日、姓名等</li>

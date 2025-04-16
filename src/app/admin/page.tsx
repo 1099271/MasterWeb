@@ -48,36 +48,36 @@ export default function AdminDashboard() {
     if (isLoading) {
       return (
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600"></div>
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600 dark:border-indigo-400"></div>
         </div>
       );
     }
 
     return (
-      <div>
-        <h1 className="text-2xl font-semibold text-gray-900">管理员控制面板</h1>
+      <div className="text-gray-900 dark:text-gray-100">
+        <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">管理员控制面板</h1>
         
         <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {/* 用户统计卡片 */}
-          <div className="bg-white overflow-hidden shadow rounded-lg">
+          <div className="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-700">
             <div className="px-4 py-5 sm:p-6">
               <div className="flex items-center">
-                <div className="flex-shrink-0 bg-indigo-500 rounded-md p-3">
+                <div className="flex-shrink-0 bg-indigo-500 dark:bg-indigo-600 rounded-md p-3">
                   <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                   </svg>
                 </div>
                 <div className="ml-5 w-0 flex-1">
                   <dl>
-                    <dt className="text-sm font-medium text-gray-500 truncate">总用户数</dt>
-                    <dd className="text-3xl font-semibold text-gray-900">{stats.totalUsers}</dd>
+                    <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">总用户数</dt>
+                    <dd className="text-3xl font-semibold text-gray-900 dark:text-white">{stats.totalUsers}</dd>
                   </dl>
                 </div>
               </div>
             </div>
-            <div className="bg-gray-50 px-4 py-4 sm:px-6">
+            <div className="bg-gray-50 dark:bg-gray-700/50 px-4 py-4 sm:px-6 border-t border-gray-200 dark:border-gray-700">
               <div className="text-sm">
-                <Link href="/admin/user-management" className="font-medium text-indigo-600 hover:text-indigo-500">
+                <Link href="/admin/user-management" className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">
                   查看所有用户
                 </Link>
               </div>
@@ -85,7 +85,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* 活跃用户卡片 */}
-          <div className="bg-white overflow-hidden shadow rounded-lg">
+          <div className="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-700">
             <div className="px-4 py-5 sm:p-6">
               <div className="flex items-center">
                 <div className="flex-shrink-0 bg-green-500 rounded-md p-3">
@@ -95,15 +95,15 @@ export default function AdminDashboard() {
                 </div>
                 <div className="ml-5 w-0 flex-1">
                   <dl>
-                    <dt className="text-sm font-medium text-gray-500 truncate">活跃用户</dt>
-                    <dd className="text-3xl font-semibold text-gray-900">{stats.activeUsers}</dd>
+                    <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">活跃用户</dt>
+                    <dd className="text-3xl font-semibold text-gray-900 dark:text-white">{stats.activeUsers}</dd>
                   </dl>
                 </div>
               </div>
             </div>
-            <div className="bg-gray-50 px-4 py-4 sm:px-6">
+            <div className="bg-gray-50 dark:bg-gray-700/50 px-4 py-4 sm:px-6 border-t border-gray-200 dark:border-gray-700">
               <div className="text-sm">
-                <Link href="/admin/user-management?is_active=true" className="font-medium text-indigo-600 hover:text-indigo-500">
+                <Link href="/admin/user-management?is_active=true" className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">
                   查看活跃用户
                 </Link>
               </div>
@@ -111,7 +111,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* 已验证用户卡片 */}
-          <div className="bg-white overflow-hidden shadow rounded-lg">
+          <div className="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-700">
             <div className="px-4 py-5 sm:p-6">
               <div className="flex items-center">
                 <div className="flex-shrink-0 bg-blue-500 rounded-md p-3">
@@ -121,15 +121,15 @@ export default function AdminDashboard() {
                 </div>
                 <div className="ml-5 w-0 flex-1">
                   <dl>
-                    <dt className="text-sm font-medium text-gray-500 truncate">已验证用户</dt>
-                    <dd className="text-3xl font-semibold text-gray-900">{stats.verifiedUsers}</dd>
+                    <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">已验证用户</dt>
+                    <dd className="text-3xl font-semibold text-gray-900 dark:text-white">{stats.verifiedUsers}</dd>
                   </dl>
                 </div>
               </div>
             </div>
-            <div className="bg-gray-50 px-4 py-4 sm:px-6">
+            <div className="bg-gray-50 dark:bg-gray-700/50 px-4 py-4 sm:px-6 border-t border-gray-200 dark:border-gray-700">
               <div className="text-sm">
-                <Link href="/admin/user-management?is_verified=true" className="font-medium text-indigo-600 hover:text-indigo-500">
+                <Link href="/admin/user-management?is_verified=true" className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">
                   查看已验证用户
                 </Link>
               </div>
@@ -137,7 +137,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* 管理员卡片 */}
-          <div className="bg-white overflow-hidden shadow rounded-lg">
+          <div className="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-700">
             <div className="px-4 py-5 sm:p-6">
               <div className="flex items-center">
                 <div className="flex-shrink-0 bg-purple-500 rounded-md p-3">
@@ -147,15 +147,15 @@ export default function AdminDashboard() {
                 </div>
                 <div className="ml-5 w-0 flex-1">
                   <dl>
-                    <dt className="text-sm font-medium text-gray-500 truncate">管理员</dt>
-                    <dd className="text-3xl font-semibold text-gray-900">{stats.adminUsers}</dd>
+                    <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">管理员</dt>
+                    <dd className="text-3xl font-semibold text-gray-900 dark:text-white">{stats.adminUsers}</dd>
                   </dl>
                 </div>
               </div>
             </div>
-            <div className="bg-gray-50 px-4 py-4 sm:px-6">
+            <div className="bg-gray-50 dark:bg-gray-700/50 px-4 py-4 sm:px-6 border-t border-gray-200 dark:border-gray-700">
               <div className="text-sm">
-                <Link href="/admin/user-management?is_admin=true" className="font-medium text-indigo-600 hover:text-indigo-500">
+                <Link href="/admin/user-management?is_admin=true" className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">
                   查看所有管理员
                 </Link>
               </div>
@@ -164,14 +164,14 @@ export default function AdminDashboard() {
         </div>
 
         <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-1 lg:grid-cols-2">
-          <div className="bg-white overflow-hidden shadow rounded-lg">
+          <div className="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-700">
             <div className="px-4 py-5 sm:p-6">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">用户管理</h3>
-              <div className="mt-2 max-w-xl text-sm text-gray-500">
+              <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">用户管理</h3>
+              <div className="mt-2 max-w-xl text-sm text-gray-500 dark:text-gray-400">
                 <p>查看和管理所有用户，可以进行用户状态更改、权限设置等操作。</p>
               </div>
               <div className="mt-5">
-                <Link href="/admin/user-management" className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <Link href="/admin/user-management" className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-600 dark:focus:ring-indigo-400 dark:focus:ring-offset-gray-800">
                   用户管理
                 </Link>
               </div>

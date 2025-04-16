@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { SidebarProvider } from '@/contexts/SidebarContext';
+import { ThemeProvider } from 'next-themes';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,13 +19,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN">
-      <body className={inter.className}>
-        <AuthProvider>
-          <SidebarProvider>
-            {children}
-          </SidebarProvider>
-        </AuthProvider>
+    <html lang="zh-CN" suppressHydrationWarning>
+      <body className={`${inter.className} antialiased`}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <AuthProvider>
+            <SidebarProvider>
+              {children}
+            </SidebarProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

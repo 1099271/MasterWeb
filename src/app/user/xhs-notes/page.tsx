@@ -171,8 +171,8 @@ export default function XhsNotesPage() {
   // 获取排序按钮的样式
   const getSortButtonStyle = (field: string) => {
     return sortBy === field
-      ? 'bg-blue-100 text-blue-700'
-      : 'bg-gray-100 text-gray-700 hover:bg-gray-200';
+      ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
+      : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600';
   };
 
   // 获取排序图标
@@ -184,7 +184,7 @@ export default function XhsNotesPage() {
   return (
     <ProtectedRoute>
       <UserLayout>
-        <div>
+        <div className="text-gray-900 dark:text-gray-100">
           <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">小红书笔记列表</h1>
             <nav className="flex" aria-label="Breadcrumb">
@@ -196,7 +196,7 @@ export default function XhsNotesPage() {
                 </li>
                 <li>
                   <div className="flex items-center">
-                    <span className="mx-1 text-gray-400">/</span>
+                    <span className="mx-1 text-gray-400 dark:text-gray-500">/</span>
                     <span className="text-blue-600 dark:text-blue-500">小红书笔记</span>
                   </div>
                 </li>
@@ -205,7 +205,7 @@ export default function XhsNotesPage() {
           </div>
           
           {/* 搜索表单 */}
-          <div className="bg-white rounded-lg shadow-sm p-6 mb-6 border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6 border border-gray-200 dark:border-gray-700">
             <form onSubmit={handleSearch}>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
                 <Input
@@ -237,7 +237,7 @@ export default function XhsNotesPage() {
                 <button
                   type="button"
                   onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-                  className="text-sm text-blue-600 hover:text-blue-800 flex items-center"
+                  className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 flex items-center"
                 >
                   {showAdvancedFilters ? '收起' : '展开'}高级筛选
                   <svg 
@@ -270,8 +270,8 @@ export default function XhsNotesPage() {
               
               {/* 高级筛选选项 */}
               {showAdvancedFilters && (
-                <div className="border-t border-gray-200 pt-4 mt-4">
-                  <h3 className="text-md font-medium text-gray-900 mb-3">高级筛选</h3>
+                <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
+                  <h3 className="text-md font-medium text-gray-900 dark:text-white mb-3">高级筛选</h3>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
                     <div className="grid grid-cols-2 gap-2">
@@ -358,7 +358,7 @@ export default function XhsNotesPage() {
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
-                      <h4 className="text-sm font-medium text-gray-700 mb-2">笔记创建时间范围</h4>
+                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">笔记创建时间范围</h4>
                       <div className="grid grid-cols-2 gap-2">
                         <Input
                           label="开始时间"
@@ -378,7 +378,7 @@ export default function XhsNotesPage() {
                     </div>
                     
                     <div>
-                      <h4 className="text-sm font-medium text-gray-700 mb-2">笔记更新时间范围</h4>
+                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">笔记更新时间范围</h4>
                       <div className="grid grid-cols-2 gap-2">
                         <Input
                           label="开始时间"
@@ -403,9 +403,9 @@ export default function XhsNotesPage() {
           </div>
           
           {/* 笔记列表展示 */}
-          <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
-              <h2 className="text-lg font-semibold whitespace-nowrap">笔记列表</h2>
+              <h2 className="text-lg font-semibold whitespace-nowrap text-gray-900 dark:text-white">笔记列表</h2>
               
               {/* 排序按钮组 */}
               <div className="flex flex-wrap gap-2">
@@ -459,46 +459,47 @@ export default function XhsNotesPage() {
                 </Button>
               </div>
 
-              <div className="text-sm text-gray-500 whitespace-nowrap">
-                共 <span className="font-medium">{notesData.total}</span> 条记录
+              <div className="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                共 <span className="font-medium text-gray-700 dark:text-gray-300">{notesData.total}</span> 条记录
               </div>
             </div>
             
             {isLoading ? (
-              <div className="text-center py-8">
-                <svg className="animate-spin h-8 w-8 text-blue-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                <svg className="animate-spin h-8 w-8 text-blue-600 dark:text-blue-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
+                 加载中...
               </div>
             ) : notesData.items.length > 0 ? (
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                  <thead className="bg-gray-50 dark:bg-gray-700">
                     <tr>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         封面
                       </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         标题/ID
                       </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         作者
                       </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         互动数据
                       </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         时间
                       </th>
-                      <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         操作
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
+                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                     {notesData.items.map((note) => (
-                      <tr key={note.note_id} className="hover:bg-gray-50">
+                      <tr key={note.note_id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                         <td className="px-6 py-4 whitespace-nowrap">
                           {note.note_cover_url_default ? (
                             <img 
@@ -507,23 +508,23 @@ export default function XhsNotesPage() {
                               className="h-16 w-16 object-cover rounded-md"
                             />
                           ) : (
-                            <div className="h-16 w-16 bg-gray-200 rounded-md flex items-center justify-center">
-                              <span className="text-xs text-gray-500">无封面</span>
+                            <div className="h-16 w-16 bg-gray-200 dark:bg-gray-600 rounded-md flex items-center justify-center">
+                              <span className="text-xs text-gray-500 dark:text-gray-400">无封面</span>
                             </div>
                           )}
                         </td>
                         <td className="px-6 py-4">
-                          <div className="text-sm font-medium text-gray-900 truncate max-w-xs">
+                          <div className="text-sm font-medium text-gray-900 dark:text-white truncate max-w-xs">
                             {note.note_display_title || '无标题'}
                           </div>
-                          <div className="text-xs text-gray-500 mt-1">
+                          <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                             ID: {note.note_id}
                           </div>
                           <a 
                             href={note.note_url} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="text-xs text-blue-600 hover:text-blue-800 mt-1 inline-block"
+                            className="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 mt-1 inline-block"
                           >
                             查看原文
                           </a>
@@ -537,22 +538,22 @@ export default function XhsNotesPage() {
                                 className="h-8 w-8 rounded-full"
                               />
                             ) : (
-                              <div className="h-8 w-8 bg-gray-200 rounded-full flex items-center justify-center">
-                                <span className="text-xs text-gray-500">无</span>
+                              <div className="h-8 w-8 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center">
+                                <span className="text-xs text-gray-500 dark:text-gray-400">无</span>
                               </div>
                             )}
                             <div className="ml-3">
-                              <div className="text-sm font-medium text-gray-900">
+                              <div className="text-sm font-medium text-gray-900 dark:text-white">
                                 {note.author_nick_name || '未知用户'}
                               </div>
-                              <div className="text-xs text-gray-500">
+                              <div className="text-xs text-gray-500 dark:text-gray-400">
                                 ID: {note.author_id}
                               </div>
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-500 flex flex-col space-y-1">
+                          <div className="text-sm text-gray-500 dark:text-gray-400 flex flex-col space-y-1">
                             <span>点赞: {note.note_liked_count}</span>
                             <span>评论: {note.comment_count}</span>
                             <span>分享: {note.share_count}</span>
@@ -560,9 +561,9 @@ export default function XhsNotesPage() {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-500 flex flex-col space-y-1">
+                          <div className="text-sm text-gray-500 dark:text-gray-400 flex flex-col space-y-1">
                             <div>
-                              <span className="text-xs font-medium text-gray-700">创建:</span>
+                              <span className="text-xs font-medium text-gray-700 dark:text-gray-300">创建:</span>
                               <span className="ml-1">
                                 {note.note_create_time 
                                   ? new Date(note.note_create_time).toLocaleString('zh-CN', { 
@@ -576,7 +577,7 @@ export default function XhsNotesPage() {
                               </span>
                             </div>
                             <div>
-                              <span className="text-xs font-medium text-gray-700">更新:</span>
+                              <span className="text-xs font-medium text-gray-700 dark:text-gray-300">更新:</span>
                               <span className="ml-1">
                                 {note.note_last_update_time 
                                   ? new Date(note.note_last_update_time).toLocaleString('zh-CN', { 
@@ -594,7 +595,7 @@ export default function XhsNotesPage() {
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           <a 
                             href={`/user/xhs-notes/${note.note_id}`} 
-                            className="text-blue-600 hover:text-blue-900"
+                            className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
                           >
                             详情
                           </a>
@@ -605,7 +606,7 @@ export default function XhsNotesPage() {
                 </table>
               </div>
             ) : (
-              <div className="py-8 text-center text-gray-500">
+              <div className="py-8 text-center text-gray-500 dark:text-gray-400">
                 暂无数据
               </div>
             )}
@@ -614,9 +615,9 @@ export default function XhsNotesPage() {
             {notesData.total > 0 && (
               <div className="flex items-center justify-between mt-6">
                 <div className="flex items-center">
-                  <label className="text-sm text-gray-700 mr-2">每页显示：</label>
+                  <label className="text-sm text-gray-700 dark:text-gray-300 mr-2">每页显示：</label>
                   <select
-                    className="text-sm border-gray-300 rounded-md"
+                    className="text-sm border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     value={pageSize}
                     onChange={(e) => {
                       const newSize = parseInt(e.target.value);
@@ -634,7 +635,7 @@ export default function XhsNotesPage() {
                 <div className="flex justify-center">
                   <nav className="relative z-0 inline-flex shadow-sm -space-x-px" aria-label="Pagination">
                     <button
-                      className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                      className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 disabled:opacity-50"
                       onClick={() => handlePageChange(page - 1)}
                       disabled={page === 1}
                     >
@@ -643,11 +644,11 @@ export default function XhsNotesPage() {
                         <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
                     </button>
-                    <div className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+                    <div className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300">
                       {page} / {Math.ceil(notesData.total / pageSize)}
                     </div>
                     <button
-                      className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                      className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 disabled:opacity-50"
                       onClick={() => handlePageChange(page + 1)}
                       disabled={page >= Math.ceil(notesData.total / pageSize)}
                     >
@@ -660,8 +661,8 @@ export default function XhsNotesPage() {
                 </div>
                 
                 <div className="flex items-center">
-                  <span className="text-sm text-gray-700">
-                    显示 {(page - 1) * pageSize + 1} 至 {Math.min(page * pageSize, notesData.total)} 条，共 {notesData.total} 条
+                  <span className="text-sm text-gray-700 dark:text-gray-300">
+                    显示 {(page - 1) * pageSize + 1} 至 {Math.min(page * pageSize, notesData.total)} 条，共 <span className="font-medium text-gray-900 dark:text-white">{notesData.total}</span> 条
                   </span>
                 </div>
               </div>
